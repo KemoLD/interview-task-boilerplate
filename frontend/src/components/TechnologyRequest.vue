@@ -18,7 +18,7 @@ export default {
       { color: 'Yellow', label: 'Yellow' },
       { color: 'Orange', label: 'Orange' },
       { color: 'Red', label: 'Red' },
-      { color: 'Beaver', label: 'Beaver' },
+      { color: '#A18276', label: 'Beaver' },
       { color: 'Black', label: 'Black' },
       { color: 'White', label: 'White' }
     ])
