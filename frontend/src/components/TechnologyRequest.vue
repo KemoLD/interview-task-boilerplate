@@ -133,14 +133,32 @@ textarea:focus {
     <form @submit.prevent="handleSubmit">
       <div class="mb-2">
         <label class="text-white block mb-1 text-sm" for="technology-name">Technology name</label>
-        <input
-          v-model="technologyName"
-          @input="validateTechnologyName($event.target.value)"
-          class="bg-input-bg border-custom-gray placeholder-custom-gray text-white rounded w-full pl-2 p-1 text-sm focus:border-custom-gray focus:ring-0 focus:outline-none"
-          id="technology-name"
-          type="text"
-          placeholder="Your technology name"
-        />
+        <div class="relative">
+          <input
+            v-model="technologyName"
+            @input="validateTechnologyName($event.target.value)"
+            class="bg-input-bg border-custom-gray placeholder-custom-gray text-white rounded w-full pl-2 p-1 text-sm focus:border-custom-gray focus:ring-0 focus:outline-none"
+            id="technology-name"
+            type="text"
+            placeholder="Your technology name"
+          />
+          <span
+            v-if="validationResults.technologyName && technologyName"
+            class="absolute inset-y-0 right-0 pr-3 flex items-center text-green-500"
+            style="font-size: 1rem"
+          >
+            &#10003;
+            <!-- This is a checkmark -->
+          </span>
+          <span
+            v-if="!validationResults.technologyName && technologyName"
+            class="absolute inset-y-0 right-0 pr-3 flex items-center text-red-500"
+            style="font-size: 0.5rem"
+          >
+            &#10060;
+            <!-- This is an "x" -->
+          </span>
+        </div>
         <p
           v-if="!validationResults.technologyName && technologyName"
           class="text-red-500 mt-1 text-xs mt-1"
