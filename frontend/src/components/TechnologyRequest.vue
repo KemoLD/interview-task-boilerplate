@@ -45,6 +45,7 @@ export default {
     const isFormValid = computed(() => {
       return (
         technologyName.value &&
+        validationResults.technologyName &&
         description.value &&
         websiteURL.value &&
         validationResults.websiteURL &&
