@@ -310,6 +310,7 @@ textarea:focus {
           <div class="relative inline-block text-left w-full">
             <div class="relative">
               <button
+                type="button"
                 @click="open = !open"
                 class="inline-flex w-full py-2 text-sm font-small bg-input-bg rounded-md border border-custom-gray focus:border-enabled focus:ring-0 focus:outline-none"
                 :style="{ color: selectedColor ? selectedColor.color : '#84898C' }"

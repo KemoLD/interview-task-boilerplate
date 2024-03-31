@@ -10,11 +10,27 @@ IcePanel engineering interview task boilerplate
 
 ## Project Setup
 
+First, navigate to the `frontend` directory:
+
+```sh
+cd frontend
+```
+
+Then, install the project dependencies:
+
 ```sh
 pnpm install
 ```
 
-### Compile and Hot-Reload for Development
+## Compile and Hot-Reload for Development
+
+First, navigate to the `frontend` directory:
+
+```sh
+cd frontend
+```
+
+Then, start the development server:
 
 ```sh
 pnpm dev
