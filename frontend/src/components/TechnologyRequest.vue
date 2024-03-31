@@ -1,11 +1,10 @@
 <script>
-import { ref, computed } from 'vue'
+import { ref, computed, reactive } from 'vue'
 
 export default {
   data() {
     return {
       publicTechChoice: true
-      // other data properties...
     }
   },
   setup() {
@@ -31,13 +30,27 @@ export default {
     const docsURL = ref('')
     const changeLog = ref('')
 
+    const validationResults = reactive({
+      technologyName: true,
+      websiteURL: true,
+      docsURL: true,
+      changeLog: true
+    })
+
     const selectColor = (color) => {
       selectedColor.value = color
       open.value = false
     }
 
     const isFormValid = computed(() => {
-      return technologyName.value && description.value && websiteURL.value
+      return (
+        technologyName.value &&
+        description.value &&
+        websiteURL.value &&
+        validationResults.websiteURL &&
+        (docsURL.value ? validationResults.docsURL : true) &&
+        (changeLog.value ? validationResults.changeLog : true)
+      )
     })
 
     const handleSubmit = () => {
@@ -60,12 +73,43 @@ export default {
       open,
       selectColor,
       technologyName,
+      validationResults,
       description,
       websiteURL,
       docsURL,
       changeLog,
       handleSubmit,
       isFormValid
+    }
+  },
+  methods: {
+    validateTechnologyName(name) {
+      if (!name) {
+        this.validationResults.technologyName = true
+        return
+      }
+      const technologies = ['icePanel']
+      const isTechnologyNameTaken = technologies.some(
+        (technology) => technology.toLowerCase() === name.toLowerCase()
+      )
+      this.validationResults.technologyName = !isTechnologyNameTaken
+    },
+    validateURL(field, url) {
+      if (!url) {
+        this.validationResults[field] = true
+        return
+      }
+
+      const urlPattern = new RegExp(
+        '^(https?:\\/\\/)?' + // protocol
+          '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+          '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+          '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+          '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+          '(\\#[-a-z\\d_]*)?$',
+        'i'
+      )
+      this.validationResults[field] = urlPattern.test(url)
     }
   }
 }
@@ -75,6 +119,10 @@ export default {
 input:focus,
 textarea:focus {
   @apply focus:outline-enabled;
+}
+.bg-custom-dark {
+  overflow-y: auto;
+  max-height: 100vh;
 }
 </style>
 
@@ -86,11 +134,24 @@ textarea:focus {
         <label class="text-white block mb-1 text-sm" for="technology-name">Technology name</label>
         <input
           v-model="technologyName"
+          @input="validateTechnologyName($event.target.value)"
           class="bg-input-bg border-custom-gray placeholder-custom-gray text-white rounded w-full pl-2 p-1 text-sm focus:border-custom-gray focus:ring-0 focus:outline-none"
           id="technology-name"
           type="text"
           placeholder="Your technology name"
         />
+        <p
+          v-if="!validationResults.technologyName && technologyName"
+          class="text-red-500 mt-1 text-xs mt-1"
+        >
+          This already exists
+        </p>
+        <p
+          v-if="validationResults.technologyName && technologyName"
+          class="text-green-500 mt-1 text-xs mt-1"
+        >
+          Cool - this technology hasn't been added yet!
+        </p>
       </div>
       <div class="mb-2">
         <label class="text-white block mb-1 text-sm" for="description">Description</label>
@@ -122,12 +183,19 @@ textarea:focus {
           <img src="/globe-solid.svg" class="absolute h-5 w-5 ml-2" alt="Globe Icon" />
           <input
             v-model="websiteURL"
+            @input="validateURL('websiteURL', $event.target.value)"
             class="flex-grow bg-input-bg pl-9 border-custom-gray placeholder-custom-gray text-white rounded text-sm focus:border-custom-gray focus:ring-0 focus:outline-none"
             id="websiteURL"
             type="text"
             placeholder="e.g icepanel.io"
           />
         </div>
+        <p
+          v-if="!validationResults.websiteURL && websiteURL"
+          class="text-red-500 mt-1 text-xs mt-1"
+        >
+          Not a valid URL
+        </p>
       </div>
       <div class="mb-2">
         <label class="text-white block mb-1 text-sm" for="docsURL"
@@ -137,12 +205,16 @@ textarea:focus {
           <img src="/globe-solid.svg" class="absolute h-5 w-5 ml-2" alt="Globe Icon" />
           <input
             v-model="docsURL"
+            @input="validateURL('docsURL', $event.target.value)"
             class="flex-grow bg-input-bg pl-9 border-custom-gray placeholder-custom-gray text-white rounded text-sm focus:border-custom-gray focus:ring-0 focus:outline-none"
             id="docsURL"
             type="text"
             placeholder="e.g docs.icepanel.io"
           />
         </div>
+        <p v-if="!validationResults.docsURL && docsURL" class="text-red-500 mt-1 text-xs mt-1">
+          Not a valid URL
+        </p>
       </div>
       <div class="mb-2">
         <label class="text-white block mb-1 text-sm" for="changeLog"
@@ -152,12 +224,16 @@ textarea:focus {
           <img src="/globe-solid.svg" class="absolute h-5 w-5 ml-2" alt="Globe Icon" />
           <input
             v-model="changeLog"
+            @input="validateURL('changeLog', $event.target.value)"
             class="flex-grow bg-input-bg pl-9 border-custom-gray placeholder-custom-gray text-white rounded text-sm focus:border-custom-gray focus:ring-0 focus:outline-none"
             id="changeLog"
             type="text"
             placeholder="e.g icepanel.io/changelog"
           />
         </div>
+        <p v-if="!validationResults.changeLog && changeLog" class="text-red-500 mt-1 text-xs mt-1">
+          Not a valid URL
+        </p>
       </div>
       <div class="mb-2">
         <label class="text-white block mb-1 text-sm" for="brandColour"
