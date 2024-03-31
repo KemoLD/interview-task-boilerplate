@@ -145,7 +145,7 @@ textarea:focus {
 </style>
 
 <template>
-  <div class="bg-custom-dark p-4 rounded-lg w-full sm:w-3/4 lg:w-1/3 mx-auto">
+  <div class="bg-custom-dark p-8 rounded-lg w-full sm:w-3/4 lg:w-1/3 mx-auto">
     <h1 class="text-white text-xl mb-4">Technology choice request</h1>
     <form @submit.prevent="handleSubmit">
       <div class="mb-2">
