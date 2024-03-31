@@ -11,12 +11,17 @@ export default {
         'input-bg': '#3b3c3e',
         disabled: '#134a66',
         enabled: '#62e2fe'
+      },
+      outline: {
+        enabled: ['2px solid', 'var(--enabled)']
       }
     }
   },
   variants: {
     extend: {
-      textColor: ['placeholder']
+      textColor: ['placeholder'],
+      outline: ['focus'],
+      borderColor: ['focus']
     }
   },
   plugins: [require('@tailwindcss/forms')]
