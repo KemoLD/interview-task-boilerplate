@@ -109,6 +109,9 @@ export default {
       )
       this.validationResults.technologyName = !isTechnologyNameTaken
     },
+    resetImage() {
+      this.image = null
+    },
     validateURL(field, url) {
       if (!url) {
         this.validationResults[field] = true
@@ -198,7 +201,17 @@ textarea:focus {
         <small class="text-custom-gray block">For people new to this technology</small>
       </div>
       <div class="mb-2">
-        <label class="text-white block mb-1 text-sm" for="icon">Icon</label>
+        <div class="flex justify-between items-center">
+          <label class="text-white mb-1 text-sm" for="icon">Icon</label>
+          <button
+            v-if="image"
+            @click="resetImage"
+            class="flex items-center text-custom-gray text-sm"
+          >
+            Reset
+            <img src="/rotate-left-solid.svg" class="h-4 w-4 ml-2" alt="Reset Icon" />
+          </button>
+        </div>
         <div
           class="bg-input-bg border-custom-gray border-dotted border-2 text-custom-gray rounded w-full p-4 text-center text-sm"
         >
