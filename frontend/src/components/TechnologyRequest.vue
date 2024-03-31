@@ -1,5 +1,6 @@
 <script>
 import { ref, computed, reactive } from 'vue'
+import { useToast } from 'vue-toast-notification'
 
 export default {
   data() {
@@ -21,6 +22,7 @@ export default {
       { color: 'Black', label: 'Black' },
       { color: 'White', label: 'White' }
     ])
+    const toast = useToast()
 
     const selectedColor = ref(null)
     const open = ref(false)
@@ -74,6 +76,16 @@ export default {
       }
 
       console.log(formData)
+      toast.success('Form submitted successfully!')
+
+      technologyName.value = ''
+      description.value = ''
+      websiteURL.value = ''
+      docsURL.value = ''
+      changeLog.value = ''
+      selectedColor.value = ''
+      publicTechChoice.value = ''
+      image.value = null
     }
 
     return {
@@ -87,6 +99,7 @@ export default {
       validationResults,
       description,
       websiteURL,
+      toast,
       docsURL,
       changeLog,
       handleSubmit,
