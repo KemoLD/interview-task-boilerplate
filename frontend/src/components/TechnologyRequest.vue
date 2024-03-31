@@ -25,6 +25,7 @@ export default {
     const selectedColor = ref(null)
     const open = ref(false)
     const technologyName = ref('')
+    const image = ref(null)
     const description = ref('')
     const websiteURL = ref('')
     const docsURL = ref('')
@@ -37,6 +38,12 @@ export default {
       changeLog: true
     })
 
+    const onFileChange = (e) => {
+      console.log('here: ', e.target.files)
+      const file = e.target.files[0]
+      image.value = URL.createObjectURL(file)
+    }
+
     const selectColor = (color) => {
       selectedColor.value = color
       open.value = false
@@ -47,6 +54,7 @@ export default {
         technologyName.value &&
         validationResults.technologyName &&
         description.value &&
+        image.value &&
         websiteURL.value &&
         validationResults.websiteURL &&
         (docsURL.value ? validationResults.docsURL : true) &&
@@ -74,6 +82,8 @@ export default {
       open,
       selectColor,
       technologyName,
+      image,
+      onFileChange,
       validationResults,
       description,
       websiteURL,
@@ -84,6 +94,10 @@ export default {
     }
   },
   methods: {
+    onButtonClick(e) {
+      e.preventDefault()
+      this.$refs.fileInput.click()
+    },
     validateTechnologyName(name) {
       if (!name) {
         this.validationResults.technologyName = true
@@ -188,9 +202,17 @@ textarea:focus {
         <div
           class="bg-input-bg border-custom-gray border-dotted border-2 text-custom-gray rounded w-full p-4 text-center text-sm"
         >
-          <p>Drag and drop image here</p>
-          <p>Format: SVG / PNG / JPEG</p>
-          <button class="bg-custom-gray text-white rounded mt-2 px-12 py-2 text-sm">
+          <img v-if="image" :src="image" class="mb-2" />
+          <p v-else>
+            Drag and drop image here
+            <br />
+            Format: SVG / PNG / JPEG
+          </p>
+          <input type="file" @change="onFileChange" class="hidden" ref="fileInput" />
+          <button
+            @click="(e) => onButtonClick(e)"
+            class="bg-custom-gray text-white rounded mt-2 px-12 py-2 text-sm"
+          >
             Click to choose image
           </button>
         </div>
